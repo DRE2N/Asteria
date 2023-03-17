@@ -1,0 +1,4 @@
+name: Test
+version: '${version}'
+main: de.erethon.asteria.Asteria
+api-version: 1.19
