@@ -1,6 +1,7 @@
 package de.erethon.asteria;
 
 import de.erethon.asteria.blocks.AsteriaBlockManager;
+import de.erethon.asteria.commands.AsteriaCommandCache;
 import de.erethon.asteria.decorations.DecorationManager;
 import de.erethon.asteria.listeners.AsteriaBlockListener;
 import de.erethon.bedrock.compatibility.Internals;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 public final class Asteria extends EPlugin implements Listener {
 
     private static Asteria instance;
+    private AsteriaCommandCache commandCache;
     public static NamespacedKey asteriaTypeKey = new NamespacedKey(Asteria.getInstance(), "asteria_type");
     private AsteriaBlockListener blockListener = new AsteriaBlockListener();
     private DecorationManager decorationManager;
@@ -69,6 +71,7 @@ public final class Asteria extends EPlugin implements Listener {
             }
         }
         blockManager = new AsteriaBlockManager(blocksFile);
+        commandCache = new AsteriaCommandCache(this);
     }
 
     @Override
