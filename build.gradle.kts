@@ -16,15 +16,20 @@ description = "Plugin for custom blocks and objects using display entities"
 repositories {
     mavenLocal()
     mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://erethon.de/repo/")
     maven("https://repo.inventivetalent.org/content/groups/public/")
+    maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://ci.emc.gs/nexus/content/groups/aikar/")
+    maven("https://repo.aikar.co/content/groups/aikar")
+    maven("https://repo.md-5.net/content/repositories/releases/")
+    maven("https://hub.spigotmc.org/nexus/content/groups/public/")
+    maven("https://jitpack.io")
     maven("https://hub.jeff-media.com/nexus/repository/jeff-media-public/")
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.19.4-R0.1-SNAPSHOT")
+    paperweight.devBundle("de.erethon.papyrus", "1.19.4-R0.1-SNAPSHOT")
     implementation("de.erethon:bedrock:1.2.5")
     implementation("com.jeff_media:CustomBlockData:2.2.0")
 }

@@ -49,6 +49,8 @@ public class AsteriaBlockManager {
         }
     }
 
+    public void test() {}
+
     public void save() throws IOException {
         YamlConfiguration cfg = new YamlConfiguration();
         for (AsteriaBlock block : blocks.values()) {

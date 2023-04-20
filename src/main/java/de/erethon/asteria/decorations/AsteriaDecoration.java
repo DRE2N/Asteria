@@ -1,5 +1,6 @@
 package de.erethon.asteria.decorations;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -7,6 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Transformation;
@@ -15,17 +17,33 @@ import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+enum DecorationType {
+    ITEM,
+    BLOCK,
+    TEXT
+}
+
 public class AsteriaDecoration {
 
     private String name;
-    private int customModelData;
+    private DecorationType type = DecorationType.ITEM;
     private Material material;
-    private Display.Billboard billboard;
+    private Display.Billboard billboard = Display.Billboard.FIXED;
+
+    // Item
+    private int customModelData = 0;
 
     private Transformation defaultTransformation;
 
     public AsteriaDecoration(ConfigurationSection section) {
         load(section);
+    }
+
+    public AsteriaDecoration(ItemDisplay display, String name) {
+        this.name = name;
+        this.material = display.getItemStack().getType();
+        this.defaultTransformation = display.getTransformation();
+        this.type = DecorationType.ITEM;
     }
 
     public AsteriaDecoration(String name, int customModelData, Material material) {
