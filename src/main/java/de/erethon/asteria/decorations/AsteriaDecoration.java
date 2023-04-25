@@ -42,7 +42,9 @@ public class AsteriaDecoration {
     public AsteriaDecoration(ItemDisplay display, String name) {
         this.name = name;
         this.material = display.getItemStack().getType();
-        this.customModelData = display.getItemStack().getItemMeta().getCustomModelData();
+        if (display.getItemStack().getItemMeta().hasCustomModelData()) {
+            this.customModelData = display.getItemStack().getItemMeta().getCustomModelData();
+        }
         this.defaultTransformation = display.getTransformation();
         this.type = DecorationType.ITEM;
     }

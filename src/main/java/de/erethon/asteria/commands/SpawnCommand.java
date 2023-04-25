@@ -2,10 +2,11 @@ package de.erethon.asteria.commands;
 
 import de.erethon.asteria.Asteria;
 import de.erethon.asteria.decorations.AsteriaDecoration;
-import de.erethon.asteria.decorations.DecorationManager;
 import de.erethon.bedrock.chat.MessageUtil;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.ListArgumentBuilder;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -19,8 +20,7 @@ public class SpawnCommand extends CommandAPICommand {
         withPermission("asteria.spawn");
         withShortDescription("Spawns a decoration");
         withRequirement((sender) -> sender instanceof Player);
-        withArguments(new ListArgumentBuilder<String>("id").withList(Asteria.getInstance().getDecorationManager().getDecorationNames())
-                .withStringMapper().buildText());
+        withArguments(new StringArgument("<name").replaceSuggestions(ArgumentSuggestions.strings(Asteria.getInstance().getDecorationManager().getDecorationNames())));
         executesPlayer(((sender, args) -> {
             onExecute(args, sender);
         }));
