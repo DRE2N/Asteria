@@ -2,43 +2,40 @@ package de.erethon.asteria.commands;
 
 import de.erethon.asteria.Asteria;
 import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.command.ECommand;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.executors.CommandArguments;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Set;
 
-public class SelectCommand extends ECommand {
+public class SelectCommand extends CommandAPICommand {
 
     public SelectCommand() {
-        setCommand("select");
-        setAliases("s");
-        setMinArgs(0);
-        setMaxArgs(1);
-        setPlayerCommand(true);
-        setHelp("Selects an entity.");
-        setPermission("asteria.select");
+        super("select");
+        withPermission("asteria.select");
+        withAliases("sel");
+        withShortDescription("Selects a display.");
+        withRequirement((sender) -> sender instanceof Player);
+        executesPlayer(((sender, args) -> {
+            onExecute(args, sender);
+        }));
+
     }
 
-    @Override
-    public void onExecute(String[] args, CommandSender commandSender) {
-        Player player = (Player) commandSender;
+    public void onExecute(CommandArguments args, Player player) {
         Block block = player.getTargetBlockExact(8);
         RayTraceResult result = player.getWorld().rayTraceEntities(player.getEyeLocation(), player.getEyeLocation().getDirection(), 8, 5);
         if (result == null) {
             MessageUtil.sendMessage(player, "&cNothing targeted.");
             return;
         }
-        if (result != null && result.getHitEntity() != null && result.getHitEntity() instanceof Display entity && args.length < 2/* Allow selecting all even if hit */) {
+        if (result != null && result.getHitEntity() != null && result.getHitEntity() instanceof Display entity) {
             Asteria.getInstance().select(player, entity);
             MessageUtil.sendMessage(player, "&9Selected &6" + entity.getUniqueId());
             return;

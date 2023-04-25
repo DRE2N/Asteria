@@ -1,24 +1,23 @@
 package de.erethon.asteria.commands;
 
 import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.command.ECommand;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.command.CommandSender;
 
-public class HelpCommand extends ECommand {
+public class HelpCommand extends CommandAPICommand {
 
     public HelpCommand() {
-        setCommand("help");
-        setAliases("h");
-        setMinArgs(0);
-        setMaxArgs(0);
-        setHelp("Shows this help");
-        setPermission("asteria.help");
-        setPlayerCommand(true);
-        setConsoleCommand(true);
+        super("help");
+        withShortDescription("Shows the help");
+        withPermission("asteria.help");
+        executes((sender, args) -> {
+            onExecute(args, sender);
+        });
+
     }
 
-    @Override
-    public void onExecute(String[] strings, CommandSender commandSender) {
+    public void onExecute(CommandArguments args, CommandSender commandSender) {
         MessageUtil.sendMessage(commandSender, "&9Asteria Help");
         MessageUtil.sendMessage(commandSender, "&8- &6/asteria help &8- &7Shows this help");
         MessageUtil.sendMessage(commandSender, "&8- &6/asteria create &8- &7Creates a decoration from the current item");
@@ -34,6 +33,7 @@ public class HelpCommand extends ECommand {
         MessageUtil.sendMessage(commandSender, "&8- &6/asteria save &8- &7Saves a decoration");
         MessageUtil.sendMessage(commandSender, "&8- &6/asteria delete &8- &7Deletes a decoration");
         MessageUtil.sendMessage(commandSender, "&8- &6/asteria pickup &8- &7Picks up a decoration");
+        MessageUtil.sendMessage(commandSender, "&8- &6/asteria move &8- &7Moves a decoration");
         MessageUtil.sendMessage(commandSender, "");
         MessageUtil.sendMessage(commandSender, "&9&oTransformation visualizer: &6&o<click:open_url:'https://misode.github.io/transformation/'>Click me</click>");
     }

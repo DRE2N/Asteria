@@ -3,28 +3,27 @@ package de.erethon.asteria.commands;
 import de.erethon.asteria.Asteria;
 import de.erethon.asteria.decorations.PlacedDecorationWrapper;
 import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.command.ECommand;
-import io.netty.util.internal.MathUtil;
-import org.bukkit.command.CommandSender;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Transformation;
 
-public class InfoCommand extends ECommand {
+public class InfoCommand extends CommandAPICommand {
 
     public InfoCommand() {
-        setCommand("info");
-        setAliases("i");
-        setMinArgs(0);
-        setMaxArgs(0);
-        setHelp("Shows information about the selected entity");
-        setPermission("asteria.info");
-        setPlayerCommand(true);
+        super("info");
+        withAliases("i");
+        withPermission("asteria.info");
+        withShortDescription("Shows information about the selected entity");
+        withFullDescription("Shows information about the selected entity");
+        withRequirement((sender) -> sender instanceof Player);
+        executesPlayer(((sender, args) -> {
+            onExecute(args, sender);
+        }));
     }
 
-    @Override
-    public void onExecute(String[] strings, CommandSender commandSender) {
-        Player player = (Player) commandSender;
+    public void onExecute(CommandArguments args, Player player) {
         PlacedDecorationWrapper wrapper = Asteria.getInstance().getSelected(player);
         if (wrapper == null) {
             MessageUtil.sendMessage(player, "&cNo entity selected.");

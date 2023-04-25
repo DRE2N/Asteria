@@ -4,41 +4,36 @@ import de.erethon.asteria.Asteria;
 import de.erethon.asteria.decorations.AsteriaDecoration;
 import de.erethon.asteria.decorations.DecorationManager;
 import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.command.ECommand;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.ListArgumentBuilder;
+import dev.jorel.commandapi.executors.CommandArguments;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Player;
 
-public class SpawnCommand extends ECommand {
-
-    DecorationManager decorationManager = Asteria.getInstance().getDecorationManager();
+public class SpawnCommand extends CommandAPICommand {
 
     public SpawnCommand() {
-        setCommand("spawn");
-        setAliases("s");
-        setMinArgs(1);
-        setMaxArgs(1);
-        setHelp("Spawns a decoration");
-        setPermission("asteria.spawn");
-        setPlayerCommand(true);
-        setConsoleCommand(false);
+        super("spawn");
+        withPermission("asteria.spawn");
+        withShortDescription("Spawns a decoration");
+        withRequirement((sender) -> sender instanceof Player);
+        withArguments(new ListArgumentBuilder<String>("id").withList(Asteria.getInstance().getDecorationManager().getDecorationNames())
+                .withStringMapper().buildText());
+        executesPlayer(((sender, args) -> {
+            onExecute(args, sender);
+        }));
     }
 
-    @Override
-    public void onExecute(String[] args, CommandSender sender) {
-        AsteriaDecoration decoration = decorationManager.getDecoration(args[1]);
-        Player player = (Player) sender;
-        if (decoration == null) {
-            MessageUtil.sendMessage(player, "&cDecoration not found.");
-            return;
+    public void onExecute(CommandArguments args, Player player) {
+        AsteriaDecoration decoration = Asteria.getInstance().getDecorationManager().getDecoration((String) args.get(0));
+        Location location = player.getLocation();
+        Block targetBlock = player.getTargetBlockExact(7);
+        if (targetBlock != null) {
+            location = targetBlock.getLocation();
         }
-        Block targetBlock = player.getTargetBlockExact(16);
-        if (targetBlock == null) {
-            MessageUtil.sendMessage(player, "&cNo block in range.");
-            return;
-        }
-        Display display = decoration.spawn(player, targetBlock.getLocation()).getDisplay();
+        Display display = decoration.spawn(player, location).getDisplay();
         Asteria.getInstance().select(player, display);
         MessageUtil.sendMessage(player, "&9Spawned and selected decoration &6" + decoration.getName() + "&a.");
     }

@@ -3,33 +3,34 @@ package de.erethon.asteria.commands;
 import de.erethon.asteria.Asteria;
 import de.erethon.asteria.decorations.PlacedDecorationWrapper;
 import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.command.ECommand;
-import org.bukkit.command.CommandSender;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.ItemStackArgument;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
-public class ItemCommand extends ECommand {
+public class ItemCommand extends CommandAPICommand {
 
     public ItemCommand() {
-        setCommand("item");
-        setAliases("it");
-        setMinArgs(0);
-        setMaxArgs(0);
-        setHelp("Sets the display item");
-        setPermission("asteria.item");
-        setPlayerCommand(true);
+        super("item");
+        withPermission("asteria.item");
+        withShortDescription("Sets the item of the selected item display");
+        withRequirement((sender) -> sender instanceof Player);
+        withOptionalArguments(new ItemStackArgument("item"));
+        executesPlayer(((sender, args) -> {
+            onExecute(args, sender);
+        }));
     }
 
-    @Override
-    public void onExecute(String[] strings, CommandSender commandSender) {
-        Player player = (Player) commandSender;
+    public void onExecute(CommandArguments args, Player player) {
         PlacedDecorationWrapper wrapper = Asteria.getInstance().getSelected(player);
         if (wrapper == null) {
             MessageUtil.sendMessage(player, "&cNo entity selected.");
             return;
         }
         if (wrapper.getDisplay() instanceof ItemDisplay itemDisplay) {
-            itemDisplay.setItemStack(player.getInventory().getItemInMainHand());
+            itemDisplay.setItemStack((ItemStack) args.getOrDefault(0, player.getInventory().getItemInMainHand()));
             MessageUtil.sendMessage(player, "&9Item set.");
             return;
         }

@@ -26,11 +26,13 @@ repositories {
     maven("https://hub.spigotmc.org/nexus/content/groups/public/")
     maven("https://jitpack.io")
     maven("https://hub.jeff-media.com/nexus/repository/jeff-media-public/")
+    maven("https://repo.codemc.org/repository/maven-public/")
 }
 
 dependencies {
     paperweight.devBundle("de.erethon.papyrus", "1.19.4-R0.1-SNAPSHOT")
     implementation("de.erethon:bedrock:1.2.5")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.0.0")
     implementation("com.jeff_media:CustomBlockData:2.2.0")
 }
 
@@ -54,22 +56,16 @@ tasks {
         dependencies {
             include(dependency("de.erethon:bedrock:1.2.5"))
             include(dependency("com.jeff_media:CustomBlockData:2.2.0"))
+            include(dependency("dev.jorel:commandapi-bukkit-shade:9.0.0"))
         }
         relocate("de.erethon.bedrock", "de.erethon.asteria.bedrock")
         relocate("com.jeff_media.customblockdata", "de.erethon.asteria.customblockdata")
+        relocate("dev.jorel.commandapi", "de.erethon.asteria.commandapi")
     }
     bukkit {
         load = BukkitPluginDescription.PluginLoadOrder.STARTUP
         main = "de.erethon.asteria.Asteria"
         apiVersion = "1.19"
         authors = listOf("Malfrador")
-        commands {
-            register("asteria") {
-                description = "Main command for Asteria"
-                aliases = listOf("as")
-                permission = "asteria.cmd"
-                usage = "/as help"
-            }
-        }
     }
 }

@@ -4,11 +4,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DecorationManager {
 
     private HashMap<String, AsteriaDecoration> decorations = new HashMap<>();
+    private List<String> decorationNames = new ArrayList<>();
     private File dataFile;
 
     public DecorationManager(File file) {
@@ -20,6 +23,7 @@ public class DecorationManager {
 
     public void registerDecoration(AsteriaDecoration decoration) {
         decorations.put(decoration.getName(), decoration);
+        decorationNames.add(decoration.getName());
     }
 
     public AsteriaDecoration getDecoration(String name) {
@@ -28,6 +32,10 @@ public class DecorationManager {
 
     public HashMap<String, AsteriaDecoration> getDecorations() {
         return decorations;
+    }
+
+    public List<String> getDecorationNames() {
+        return decorationNames;
     }
 
     private void load(YamlConfiguration cfg) {

@@ -9,6 +9,8 @@ import de.erethon.bedrock.chat.MessageUtil;
 import de.erethon.bedrock.compatibility.Internals;
 import de.erethon.bedrock.plugin.EPlugin;
 import de.erethon.bedrock.plugin.EPluginSettings;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -58,8 +60,17 @@ public final class Asteria extends EPlugin implements Listener {
     }
 
     @Override
+    public void onLoad() {
+        CommandAPIBukkitConfig config = new CommandAPIBukkitConfig(this);
+        config.shouldHookPaperReload(true);
+        config.silentLogs(true);
+        CommandAPI.onLoad(config);
+    }
+
+    @Override
     public void onEnable() {
         super.onEnable();
+        CommandAPI.onEnable();
         instance = this;
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(blockListener, this);
@@ -81,9 +92,8 @@ public final class Asteria extends EPlugin implements Listener {
             }
         }
         blockManager = new AsteriaBlockManager(blocksFile);
-        commandCache = new AsteriaCommandCache(this);
-        commandCache.register(this);
 
+        new AsteriaCommandCache().register();
     }
 
     @EventHandler
@@ -106,10 +116,6 @@ public final class Asteria extends EPlugin implements Listener {
 
     public static Asteria getInstance() {
         return instance;
-    }
-
-    public AsteriaCommandCache getCommandCache() {
-        return commandCache;
     }
 
     public AsteriaBlockManager getBlockManager() {

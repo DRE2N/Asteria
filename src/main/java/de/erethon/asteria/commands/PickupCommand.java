@@ -3,40 +3,36 @@ package de.erethon.asteria.commands;
 import de.erethon.asteria.Asteria;
 import de.erethon.asteria.decorations.PlacedDecorationWrapper;
 import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.command.ECommand;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Rotation;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PickupCommand extends ECommand implements Listener {
+public class PickupCommand extends CommandAPICommand implements Listener {
 
-    private Map<Player, Display> selected = new HashMap<>();
+    private final Map<Player, Display> selected = new HashMap<>();
 
     public PickupCommand() {
-        setCommand("pickup");
-        setAliases("p");
-        setMinArgs(0);
-        setMaxArgs(0);
-        setHelp("Picks up the selected decoration");
-        setPermission("asteria.pickup");
-        setPlayerCommand(true);
-        Bukkit.getServer().getPluginManager().registerEvents(this, Asteria.getInstance());
+        super("pickup");
+        withPermission("asteria.pickup");
+        withShortDescription("Moves the selected entity");
+        withRequirement((sender) -> sender instanceof Player);
+        executesPlayer(((sender, args) -> {
+            onExecute(args, sender);
+        }));
     }
 
-    @Override
-    public void onExecute(String[] args, CommandSender commandSender) {
-        Player player = (Player) commandSender;
+    public void onExecute(CommandArguments args, Player player) {
+        Bukkit.getServer().getPluginManager().registerEvents(this, Asteria.getInstance());
         PlacedDecorationWrapper wrapper = Asteria.getInstance().getSelected(player);
         if (wrapper == null) {
             MessageUtil.sendMessage(player, "&cNo entity selected.");

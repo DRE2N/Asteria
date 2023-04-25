@@ -4,16 +4,19 @@ import de.erethon.asteria.Asteria;
 import de.erethon.asteria.decorations.PlacedDecorationWrapper;
 import de.erethon.bedrock.chat.MessageUtil;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class DeleteCommand extends CommandAPICommand {
+public class MoveCommand extends CommandAPICommand {
 
-    public DeleteCommand() {
-        super("delete");
-        withPermission("asteria.delete");
-        withShortDescription("Deletes the selected entity");
+    public MoveCommand() {
+        super("move");
+        withPermission("asteria.move");
+        withShortDescription("Moves the selected entity");
         withRequirement((sender) -> sender instanceof Player);
+        withArguments(new LocationArgument("location"));
         executesPlayer(((sender, args) -> {
             onExecute(args, sender);
         }));
@@ -25,8 +28,9 @@ public class DeleteCommand extends CommandAPICommand {
             MessageUtil.sendMessage(player, "&cNo entity selected.");
             return;
         }
-        wrapper.getDisplay().remove();
-        Asteria.getInstance().deselect(player);
-        MessageUtil.sendMessage(player, "&9Entity deleted.");
+        wrapper.getDisplay().teleport((Location) args.get(0));
+        MessageUtil.sendMessage(player, "&9Moved decoration.");
+
+
     }
 }

@@ -4,24 +4,21 @@ import de.erethon.asteria.Asteria;
 import de.erethon.asteria.decorations.AsteriaDecoration;
 import de.erethon.asteria.decorations.DecorationManager;
 import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.command.ECommand;
+import dev.jorel.commandapi.CommandAPICommand;
 import org.bukkit.command.CommandSender;
 
-public class ListCommand extends ECommand {
+public class ListCommand extends CommandAPICommand {
 
     public ListCommand() {
-        setCommand("list");
-        setAliases("l");
-        setMinArgs(0);
-        setMaxArgs(0);
-        setHelp("Lists all decorations");
-        setPermission("asteria.list");
-        setPlayerCommand(true);
-        setConsoleCommand(true);
+        super("list");
+        withShortDescription("Lists all decorations");
+        withPermission("asteria.list");
+        executes((sender, args) -> {
+            onExecute(sender);
+        });
     }
 
-    @Override
-    public void onExecute(String[] strings, CommandSender commandSender) {
+    public void onExecute(CommandSender commandSender) {
         DecorationManager decorationManager = Asteria.getInstance().getDecorationManager();
         MessageUtil.sendMessage(commandSender, "&9Decorations:");
         for (AsteriaDecoration decoration : decorationManager.getDecorations().values()) {

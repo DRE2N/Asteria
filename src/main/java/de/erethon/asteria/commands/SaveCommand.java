@@ -4,38 +4,34 @@ import de.erethon.asteria.Asteria;
 import de.erethon.asteria.decorations.AsteriaDecoration;
 import de.erethon.asteria.decorations.PlacedDecorationWrapper;
 import de.erethon.bedrock.chat.MessageUtil;
-import de.erethon.bedrock.command.ECommand;
-import org.bukkit.command.CommandSender;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 
-public class SaveCommand extends ECommand {
+public class SaveCommand extends CommandAPICommand {
 
     public SaveCommand() {
-        setCommand("save");
-        setAliases("s");
-        setMinArgs(0);
-        setMaxArgs(1);
-        setHelp("Saves the current decoration");
-        setPermission("asteria.save");
-        setPlayerCommand(true);
+        super("save");
+        withPermission("asteria.save");
+        withShortDescription("Saves the selected entity as a decoration");
+        withRequirement((sender) -> sender instanceof Player);
+        withArguments(new StringArgument("name"));
+        executesPlayer(((sender, args) -> {
+            onExecute(args, sender);
+        }));
     }
 
-    @Override
-    public void onExecute(String[] args, CommandSender commandSender) {
-        Player player = (Player) commandSender;
+    public void onExecute(CommandArguments args, Player player) {
         PlacedDecorationWrapper wrapper = Asteria.getInstance().getSelected(player);
         if (wrapper == null) {
             MessageUtil.sendMessage(player, "&cNo entity selected.");
             return;
         }
-        if (args.length < 2) {
-            MessageUtil.sendMessage(player, "&cPlease specify a name.");
-            return;
-        }
         if (wrapper.getDisplay() instanceof ItemDisplay itemDisplay) {
-            Asteria.getInstance().getDecorationManager().registerDecoration(new AsteriaDecoration(itemDisplay, args[1]));
-            MessageUtil.sendMessage(player, "&9Decoration saved as &6" + args[1] + "&9.");
+            Asteria.getInstance().getDecorationManager().registerDecoration(new AsteriaDecoration(itemDisplay, (String) args.get(0)));
+            MessageUtil.sendMessage(player, "&9Decoration saved as &6" + args.get(0) + "&9.");
         } else {
             MessageUtil.sendMessage(player, "&cOnly item displays can be saved currently.");
         }
