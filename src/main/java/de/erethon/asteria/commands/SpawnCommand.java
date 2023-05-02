@@ -7,6 +7,7 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -20,7 +21,7 @@ public class SpawnCommand extends CommandAPICommand {
         withPermission("asteria.spawn");
         withShortDescription("Spawns a decoration");
         withRequirement((sender) -> sender instanceof Player);
-        withArguments(new StringArgument("<name").replaceSuggestions(ArgumentSuggestions.strings(Asteria.getInstance().getDecorationManager().getDecorationNames())));
+        withArguments(new TextArgument("<name").replaceSuggestions(ArgumentSuggestions.strings(Asteria.getInstance().getDecorationManager().getDecorationNames())));
         executesPlayer(((sender, args) -> {
             onExecute(args, sender);
         }));

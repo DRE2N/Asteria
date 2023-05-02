@@ -5,7 +5,9 @@ import de.erethon.asteria.decorations.AsteriaDecoration;
 import de.erethon.asteria.decorations.PlacedDecorationWrapper;
 import de.erethon.bedrock.chat.MessageUtil;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
@@ -17,7 +19,7 @@ public class SaveCommand extends CommandAPICommand {
         withPermission("asteria.save");
         withShortDescription("Saves the selected entity as a decoration");
         withRequirement((sender) -> sender instanceof Player);
-        withArguments(new StringArgument("name"));
+        withArguments(new TextArgument("name"), new GreedyStringArgument("greedyTest"));
         executesPlayer(((sender, args) -> {
             onExecute(args, sender);
         }));

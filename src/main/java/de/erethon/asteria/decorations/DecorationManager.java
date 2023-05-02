@@ -22,8 +22,8 @@ public class DecorationManager {
 
 
     public void registerDecoration(AsteriaDecoration decoration) {
-        decorations.put(decoration.getName(), decoration);
-        decorationNames.add(decoration.getName());
+        decorations.put(decoration.getName().toLowerCase(), decoration);
+        decorationNames.add(decoration.getName().toLowerCase());
     }
 
     public AsteriaDecoration getDecoration(String name) {
@@ -48,7 +48,7 @@ public class DecorationManager {
     public void save() throws IOException {
         YamlConfiguration cfg = new YamlConfiguration();
         for (AsteriaDecoration decoration : decorations.values()) {
-            cfg.set(decoration.getName(), decoration.save());
+            cfg.set(decoration.getName().toLowerCase(), decoration.save());
         }
         cfg.save(dataFile);
     }
