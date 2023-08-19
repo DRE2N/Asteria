@@ -30,9 +30,9 @@ repositories {
 }
 
 dependencies {
-    paperweight.devBundle("de.erethon.papyrus", "1.19.4-R0.1-SNAPSHOT")
+    paperweight.devBundle("de.erethon.papyrus", "1.20.1-R0.1-SNAPSHOT")
     implementation("de.erethon:bedrock:1.2.5")
-    implementation("dev.jorel:commandapi-bukkit-shade:9.0.0")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.1.0")
     implementation("com.jeff_media:CustomBlockData:2.2.0")
 }
 
@@ -56,7 +56,7 @@ tasks {
         dependencies {
             include(dependency("de.erethon:bedrock:1.2.5"))
             include(dependency("com.jeff_media:CustomBlockData:2.2.0"))
-            include(dependency("dev.jorel:commandapi-bukkit-shade:9.0.0"))
+            include(dependency("dev.jorel:commandapi-bukkit-shade:9.1.0"))
         }
         relocate("de.erethon.bedrock", "de.erethon.asteria.bedrock")
         relocate("com.jeff_media.customblockdata", "de.erethon.asteria.customblockdata")
