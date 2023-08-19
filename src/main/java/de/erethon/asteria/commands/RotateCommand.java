@@ -36,7 +36,7 @@ public class RotateCommand extends CommandAPICommand {
             wrapper.rotateLeft((Float) args.get(1), (Float) args.get(2), (Float) args.get(3), (Float) args.get(4));
             MessageUtil.sendMessage(player, "&9Left Rotation set to &6" + args.get(1) + " &9/ &6" + args.get(2) + " &9/ &6" + args.get(3) + " &9/ &6" + args.get(4));
         }
-        if (args.get(0).equals("left")) {
+        if (args.get(0).equals("right")) {
             wrapper.rotateRight((Float) args.get(1), (Float) args.get(2), (Float) args.get(3), (Float) args.get(4));
             MessageUtil.sendMessage(player, "&9Right Rotation set to &6" + args.get(1) + " &9/ &6" + args.get(2) + " &9/ &6" + args.get(3) + " &9/ &6" + args.get(4));
         }
